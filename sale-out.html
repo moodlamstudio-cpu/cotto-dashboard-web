@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>COTTO Sale Out Dashboard</title>
+    <script type="module" crossorigin src="./assets/saleOut-qi5j41T0.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/styles-CI7xuDcN.js">
+    <link rel="stylesheet" crossorigin href="./assets/styles-CTnKKgSm.css">
+  </head>
+  <body class="sale-out-body">
+    <main class="sale-out-dashboard">
+      <header class="sale-out-header">
+        <div>
+          <p class="section-kicker">COTTO Commercial Monitor</p>
+          <h1>Sale Out Overview</h1>
+          <p id="saleOutStatus">Loading sale out data...</p>
+        </div>
+        <nav class="page-toggle" aria-label="Dashboard page">
+          <a href="./index.html">Sale In</a>
+          <a class="active" href="./sale-out.html" aria-current="page">Sale Out</a>
+        </nav>
+      </header>
+
+      <section class="sale-out-filters panel" aria-label="Sale out filters">
+        <label>Year<select id="saleOutYear"></select></label>
+        <label>Channel<select id="saleOutChannel"><option value="">All channels</option></select></label>
+        <div class="sale-out-rule"><strong>Product mix rule</strong><span>SSW = SSW + SSF + Elder Care; all remaining Product Family = Tile</span></div>
+      </section>
+
+      <section class="sale-out-kpis">
+        <article class="kpi-card sale-out-kpi-primary"><span>Sale Out YTD</span><strong id="saleOutYtd">-</strong><small id="saleOutYtdPeriod">-</small></article>
+        <article class="kpi-card"><span>Comparable YTD</span><strong id="saleOutComparable">-</strong><small id="saleOutComparableScope">-</small></article>
+        <article class="kpi-card"><span>± LY</span><strong id="saleOutLyDelta">-</strong><small id="saleOutLyValue">-</small><div id="saleOutLyBreakdown" class="sale-out-ly-breakdown"></div></article>
+      </section>
+
+      <section class="sale-out-grid">
+        <article class="panel sale-out-panel-wide">
+          <div class="panel-header"><div><h2>Sale Out Mix</h2><p>Total Net Sales split between SSW and Tile</p></div></div>
+          <div id="saleOutOverallBar" class="sale-out-overall-bar"></div>
+          <div id="saleOutMixLegend" class="sale-out-mix-legend"></div>
+        </article>
+
+        <article class="panel sale-out-panel-wide">
+          <div class="panel-header"><div><h2>Monthly Sale Out</h2><p>Net Sales by month, stacked by product mix</p></div></div>
+          <div id="saleOutMonthlyChart" class="sale-out-monthly-chart"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header"><div><h2>Channel Mix</h2><p>YTD Net Sales by store channel</p></div></div>
+          <div id="saleOutChannelBars" class="sale-out-channel-bars"></div>
+        </article>
+
+        <article class="panel sale-out-note-panel">
+          <div class="panel-header"><div><h2>Data Coverage</h2><p>How YTD and LY are calculated</p></div></div>
+          <p id="saleOutCoverageNote"></p>
+          <ul><li>COTTO Life: Jan–Jul 2025 and 2026</li><li>Klang Ceramic / COTTO X: Jan–Jul 2026</li><li>Returns remain included as negative Net Sales</li></ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

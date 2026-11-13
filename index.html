@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>COTTO Offline Sales Monitor</title>
+    <script type="module" crossorigin src="./assets/main-C6mbwKle.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/styles-CI7xuDcN.js">
+    <link rel="stylesheet" crossorigin href="./assets/styles-CTnKKgSm.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <button id="filterMenuButton" class="filter-menu-button" type="button" aria-label="Open filters" aria-controls="filterSidebar" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div id="filterBackdrop" class="filter-backdrop" hidden></div>
+      <aside id="filterSidebar" class="sidebar" aria-hidden="true">
+        <div class="brand-block">
+          <div class="eyebrow">Private Sales Monitor</div>
+          <h1 id="brandTitle">COTTO Offline</h1>
+          <p id="dataStatus">กำลังโหลดข้อมูล...</p>
+        </div>
+
+        <section class="filter-panel" aria-label="ตัวกรองข้อมูล">
+          <label>
+            เดือน
+            <select id="yearFilter" multiple size="4"></select>
+          </label>
+          <label>
+            Month
+            <select id="monthFilter" multiple size="6"></select>
+          </label>
+          <label>
+            Account
+            <select id="accountFilter" multiple size="4"></select>
+          </label>
+          <label>
+            สาขา
+            <select id="branchFilter" multiple size="6"></select>
+          </label>
+          <label>
+            Brand
+            <select id="brandFilter" multiple size="6"></select>
+          </label>
+          <label>
+            Category
+            <select id="familyFilter" multiple size="6"></select>
+          </label>
+          <label class="search-box" for="searchInput">
+            ค้นหา SKU / PO / สาขา
+            <input id="searchInput" type="search" placeholder="เช่น CL-DM, faucet, C11004" />
+          </label>
+          <button id="resetButton" class="ghost-button" type="button">ล้างตัวกรอง</button>
+        </section>
+      </aside>
+
+      <main class="dashboard">
+        <section class="topbar">
+          <div>
+            <p id="viewKicker" class="section-kicker">Offline Sales Monitor</p>
+            <h2 id="viewTitle">Sales Overview</h2>
+            <p id="viewSubtitle">Sales and SET with brand mix growth</p>
+          </div>
+          <div class="topbar-actions">
+            <nav class="page-toggle" aria-label="Dashboard page">
+              <a class="active" href="./index.html" aria-current="page">Sale In</a>
+              <a href="./sale-out.html">Sale Out</a>
+            </nav>
+            <div class="view-toggle" role="group" aria-label="Sales view">
+              <button class="view-button active" data-view="offline" type="button">Offline</button>
+              <button class="view-button" data-view="online" type="button">Online</button>
+            </div>
+            <button id="refreshDataButton" class="refresh-button" type="button" title="Rebuild data from the newest local Excel file">Refresh data</button>
+            <div class="metric-toggle" role="group" aria-label="Metric">
+              <button class="metric-button active" data-metric="NP_B" type="button">Sales</button>
+              <button class="metric-button" data-metric="SET" type="button">SET</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="refreshPanel" class="refresh-panel" hidden>
+          <div>
+            <strong id="refreshTitle">Refresh data</strong>
+            <p id="refreshMessage">Preparing...</p>
+          </div>
+          <button id="dismissRefreshPanel" class="small-button" type="button">Close</button>
+        </section>
+
+        <section class="mobile-latest-panel" aria-label="Latest month sales by account">
+          <div class="mobile-latest-header">
+            <div>
+              <p class="section-kicker">Latest Month</p>
+              <h3 id="mobileLatestTitle">-</h3>
+            </div>
+            <span id="mobileLatestRows">-</span>
+          </div>
+          <div id="mobileLatestAccounts" class="mobile-account-list"></div>
+        </section>
+
+        <section class="top-summary-row" aria-label="Dashboard summary">
+          <div class="kpi-grid" aria-label="ตัวชี้วัดหลัก">
+          <article class="kpi-card">
+            <div class="kpi-icon" aria-hidden="true">💸</div>
+            <span>Sales</span>
+            <strong id="kpiSales">-</strong>
+            <small>NP_B sales</small>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-icon" aria-hidden="true">📦</div>
+            <span>SET</span>
+            <strong id="kpiSet">-</strong>
+            <small>Unit set sold</small>
+          </article>
+          </div>
+
+          <article class="brand-summary-panel" aria-label="Brand mix growth">
+            <div class="panel-header">
+              <div>
+                <h3>Mix Overview</h3>
+                <p id="brandMixLabel">Sales, MoM and YoY by brand</p>
+              </div>
+            </div>
+            <div class="brand-overview-grid">
+              <div id="brandMixCards" class="brand-card-grid"></div>
+              <div class="mix-pie-grid">
+                <div class="mix-pie-panel">
+                  <h4>Brand Mix</h4>
+                  <div id="brandPie" class="brand-mix-chart"></div>
+                </div>
+              </div>
+            </div>
+            <div class="category-mix-panel">
+              <h4>Category Mix</h4>
+              <div id="categoryPie" class="brand-mix-chart category-mix-chart"></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel po-basket-panel" aria-label="PO and basket size by channel">
+          <div class="panel-header">
+            <div>
+              <h3 id="poBasketTitle">PO & Basket by Channel</h3>
+              <p id="poBasketLabel">Unique PO count and basket size per bill</p>
+            </div>
+          </div>
+          <div id="poBasketCards" class="po-basket-grid"></div>
+        </section>
+
+        <section class="layout-grid">
+          <article class="panel panel-wide">
+            <div class="panel-header">
+              <div>
+                <h3>Sales Overtime</h3>
+                <p>Monthly Sales for the year, compared with last year</p>
+              </div>
+              <div class="monthly-trend-controls">
+                <label class="monthly-trend-limit">
+                  <span>Show to</span>
+                  <select id="monthlyTrendEndMonth"></select>
+                </label>
+                <button class="small-button" data-action="clear-selection" type="button">ล้าง SKU</button>
+              </div>
+            </div>
+            <div id="monthlyTrend" class="bars horizontal"></div>
+          </article>
+
+          <article class="panel panel-wide daily-trend-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Daily Sales Trend</h3>
+                <p id="dailyTrendLabel">Latest month vs previous month vs same month last year</p>
+              </div>
+              <div class="daily-trend-controls" aria-label="Daily sales trend range">
+                <button id="clearDailyDateButton" class="small-button clear-daily-date" type="button" hidden>Clear day</button>
+                <div class="daily-range-toggle" role="group" aria-label="Range preset">
+                  <button class="daily-range-button" data-daily-range="month" type="button">Month</button>
+                  <button class="daily-range-button active" data-daily-range="7" type="button">7 days</button>
+                  <button class="daily-range-button" data-daily-range="30" type="button">30 days</button>
+                  <button class="daily-range-button" data-daily-range="custom" type="button">Custom</button>
+                </div>
+                <div id="dailyCustomRange" class="daily-custom-range" hidden>
+                  <input id="dailyStartDate" type="date" aria-label="Start date" />
+                  <span>to</span>
+                  <input id="dailyEndDate" type="date" aria-label="End date" />
+                </div>
+              </div>
+            </div>
+            <div id="dailyTrend" class="daily-trend"></div>
+          </article>
+
+          <article class="panel dashboard-secondary">
+            <div class="panel-header">
+              <div>
+                <h3>รายสาขา</h3>
+                <p id="branchCount">-</p>
+              </div>
+            </div>
+            <div id="branchBars" class="bars"></div>
+          </article>
+
+          <article class="panel dashboard-secondary">
+            <div class="panel-header">
+              <div>
+                <h3>Brand Mix</h3>
+                <p>คลิก Brand เพื่อ filter</p>
+              </div>
+            </div>
+            <div id="brandBars" class="bars"></div>
+          </article>
+
+          <article class="panel dashboard-secondary">
+            <div class="panel-header">
+              <div>
+                <h3>Category</h3>
+                <p>กลุ่มสินค้าที่สร้างยอด</p>
+              </div>
+            </div>
+            <div id="familyBars" class="bars compact"></div>
+          </article>
+
+          <article class="panel panel-wide report-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Top Branches by Brand</h3>
+                <p id="branchBrandPivotLabel">Click a branch row to filter the whole dashboard</p>
+              </div>
+            </div>
+            <div class="table-wrap report-table-wrap branch-brand-table-wrap">
+              <table class="report-table">
+                <thead id="branchBrandPivotHead"></thead>
+                <tbody id="branchBrandPivotBody"></tbody>
+                <tfoot id="branchBrandPivotFoot"></tfoot>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel panel-wide report-panel top-sku-report">
+            <div class="panel-header">
+              <div>
+                <h3>Top sale SKU</h3>
+                <p>Ranked by Sales. Click to view transactions</p>
+              </div>
+              <div class="top-sku-controls">
+                <label>Category
+                  <select id="topSkuCategoryFilter" aria-label="Filter Top sale SKU by category"><option value="">ทุก Category</option></select>
+                </label>
+              </div>
+            </div>
+            <div class="table-wrap report-table-wrap">
+              <table class="report-table top-sku-table">
+                <thead>
+                  <tr>
+                    <th>SKU</th>
+                    <th>สินค้า</th>
+                    <th>Brand</th>
+                    <th class="number">Sales</th>
+                    <th class="number">SET</th>
+                    <th class="number">MoM</th>
+                    <th class="number">YoY</th>
+                  </tr>
+                </thead>
+                <tbody id="topSkuTable"></tbody>
+                <tfoot id="topSkuFoot"></tfoot>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel panel-wide report-panel promotion-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Promotion Performance</h3>
+                <p id="promotionSummaryLabel">Active offline promotions for the selected month</p>
+              </div>
+              <div class="top-sku-controls" id="promotionFilterControls">
+                <label>Promotion
+                  <select id="promotionNameFilter"><option value="">ทุกโปรโมชัน</option></select>
+                </label>
+              </div>
+            </div>
+            <div id="promotionCards" class="promotion-card-grid"></div>
+            <div class="table-wrap report-table-wrap">
+              <table class="report-table promotion-table">
+                <thead>
+                  <tr>
+                    <th>Promotion</th>
+                    <th>SKU</th>
+                    <th>Product</th>
+                    <th>Period</th>
+                    <th class="number">Promo Price</th>
+                    <th class="number">Sales</th>
+                    <th class="number">SET</th>
+                    <th class="number">Bills</th>
+                  </tr>
+                </thead>
+                <tbody id="promotionTable"></tbody>
+                <tfoot id="promotionFoot"></tfoot>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel panel-wide dashboard-secondary">
+            <div class="panel-header">
+              <div>
+                <h3>ข้อมูลเพิ่มเติม</h3>
+                <p id="detailLabel">เลือกสาขา / Brand / SKU เพื่อดูรายละเอียด</p>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div>
+                <h4>Branch x Brand</h4>
+                <div class="table-wrap slim">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Branch</th>
+                        <th>Brand</th>
+                        <th class="number">Sales</th>
+                        <th class="number">Share</th>
+                      </tr>
+                    </thead>
+                    <tbody id="branchBrandTable"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div>
+                <h4>Recent Transactions</h4>
+                <div class="table-wrap slim">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Branch</th>
+                        <th>SKU</th>
+                        <th class="number">Sales</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transactionTable"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+  </body>
+</html>
